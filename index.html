@@ -360,8 +360,9 @@ footer p.d{max-width:620px;margin:10px auto 0;font-size:.78rem;opacity:.75}
     <div class="f"><label>WhatsApp number</label><input id="i_phone" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit number" autocomplete="tel"><div class="er">Enter a valid 10-digit number</div></div>
     <div class="row">
       <div class="f"><label>Age</label><input id="i_age" type="number" min="15" max="65" placeholder="Age"><div class="er">Age 15–65</div></div>
-      <div class="f"><label>Profession</label><select id="i_prof"><option value="">Select</option><option>Student</option><option>Housewife</option><option>Working Professional</option><option>Other</option></select><div class="er">Select one</div></div>
+      <div class="f"><label>Gender</label><select id="i_gender"><option value="">Select</option><option value="female">Female</option><option value="male">Male</option><option value="other">Other</option></select><div class="er">Select one</div></div>
     </div>
+    <div class="f"><label>Profession</label><select id="i_prof"><option value="">Select your status</option><option>Student</option><option>Housewife</option><option>Working Professional</option><option>Other</option></select><div class="er">Select one</div></div>
     <button type="submit" class="btn" style="width:100%">Continue on WhatsApp</button>
     <p class="sec">🔒 Your details are kept private.</p>
   </form>
@@ -370,7 +371,7 @@ footer p.d{max-width:620px;margin:10px auto 0;font-size:.78rem;opacity:.75}
 <div class="modal pp" id="pm" role="dialog" aria-modal="true">
   <button class="x" id="px" aria-label="Close">×</button>
   <h3 style="margin-bottom:16px">Privacy Policy</h3>
-  <p><strong>Information We Collect:</strong> Name, phone, age and profession you provide via our form.</p>
+  <p><strong>Information We Collect:</strong> Name, phone, age, gender and profession you provide via our form.</p>
   <p><strong>How We Use It:</strong> Only to share program info, provide mentorship support and updates. Never sold to third parties.</p>
   <p><strong>Data Security:</strong> We implement industry-standard measures. Data is accessed only by authorized personnel.</p>
   <p><strong>Your Rights:</strong> Access, correct, or delete your data anytime by contacting us on WhatsApp.</p>
@@ -437,12 +438,12 @@ function trackContact(){try{if(typeof fbq!=='undefined'&&!sessionStorage.getItem
 function bad(id,b){document.getElementById(id).closest('.f').classList.toggle('bad',b);return !b}
 form.addEventListener('submit',e=>{
   e.preventDefault();
-  const name=$('#i_name').value.trim(),phone=$('#i_phone').value.replace(/\D/g,''),age=$('#i_age').value,prof=$('#i_prof').value,source=src.value||'Website';
-  const ok=[bad('i_name',name.length<2),bad('i_phone',phone.length!==10),bad('i_age',!age||age<15||age>65),bad('i_prof',!prof)].every(Boolean);
+  const name=$('#i_name').value.trim(),phone=$('#i_phone').value.replace(/\D/g,''),age=$('#i_age').value,gender=$('#i_gender').value,prof=$('#i_prof').value,source=src.value||'Website';
+  const ok=[bad('i_name',name.length<2),bad('i_phone',phone.length!==10),bad('i_age',!age||age<15||age>65),bad('i_gender',!gender),bad('i_prof',!prof)].every(Boolean);
   if(!ok)return;
-  const params=new URLSearchParams({name,phone,age,gender:'female',profession:prof,source:source+' | '+CLIENT});
+  const params=new URLSearchParams({name,phone,age,gender,profession:prof,source:source+' | '+CLIENT});
   try{fetch(SCRIPT_URL+'?'+params.toString(),{method:'POST',mode:'no-cors',keepalive:true}).catch(()=>{})}catch(err){}
-  const msg=encodeURIComponent(`Hello Zainab! 👋\n\nI'd like to join your women's skill community. Here are my details:\n\nName: ${name}\nPhone: ${phone}\nAge: ${age}\nProfession: ${prof}\n\nPlease share the next steps. Thank you!`);
+  const msg=encodeURIComponent(`Hello Zainab! 👋\n\nI'd like to join your women's skill community. Here are my details:\n\nName: ${name}\nPhone: ${phone}\nAge: ${age}\nGender: ${gender}\nProfession: ${prof}\n\nPlease share the next steps. Thank you!`);
   trackContact();closeAll();setTimeout(()=>form.reset(),300);
   window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`,'_blank');
 });
